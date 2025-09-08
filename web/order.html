@@ -1,0 +1,244 @@
+<html>
+
+  <head>
+    <title>+ Order</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap5.min.js"></script>
+    <script src="js/logix.js"></script>
+    <script type="text/javascript" src="eel.js"></script>
+    <style>
+      body {
+        background: #f6f8fb;
+      }
+
+      .card {
+        border: none;
+        box-shadow: 0 4px 12px rgba(100, 100, 100, 0.12);
+        border-radius: 16px;
+      }
+
+      .card-header {
+        background: #1976d2 !important;
+        color: #fff !important;
+        border-radius: 12px 12px 0 0;
+        font-size: 20px;
+        letter-spacing: 1px;
+      }
+
+      .form-label,
+      .fw-semibold {
+        font-weight: 600 !important;
+      }
+
+      .form-select,
+      .form-control,
+      .input-group-text {
+        border-radius: 6px;
+        box-shadow: none;
+      }
+
+      .btn-success,
+      .btn-info {
+        border-radius: 8px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+      }
+
+      .btn-info {
+        background-color: #0288d1;
+        border: none;
+      }
+
+      .btn-info.text-white:hover {
+        background-color: #01579b;
+      }
+
+      .btn-success:focus,
+      .btn-info:focus {
+        outline: none;
+        box-shadow: 0 2px 8px rgba(25, 118, 210, 0.18);
+      }
+
+      .table {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .table th {
+        background: #f3f6fa;
+        font-weight: 700;
+        color: #1976d2;
+        letter-spacing: 1px;
+        font-size: 16px;
+      }
+
+      .table td {
+        background: #fff;
+        font-size: 15px;
+        color: #555;
+      }
+
+      .loader-over-lay {
+        background: rgba(255, 255, 255, 0.8);
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 3999;
+        display: none;
+      }
+
+      .loader-over-lay.active {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <!-- Brand/Logo (optional) -->
+        <a class="navbar-brand" href="#">Your Brand</a>
+
+        <!-- Toggler for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="home.html">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="masterDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Master
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="masterDropdown">
+                <li><a class="dropdown-item" href="customer.html">Customer</a></li>
+                <li><a class="dropdown-item" href="product.html">Product</a></li>
+                <li><a class="dropdown-item" href="price_list.html">Price List</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Reports
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+                <li><a class="dropdown-item" href="order_grid.html">Order Grid</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="order.html">+ Order</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4 mb-4">
+      <div class="card shadow-sm p-4">
+        <div class="card-body">
+          <!-- Customer Selection -->
+          <div class="row align-items-center mb-4">
+            <div class="col-lg-8 col-md-7">
+              <label for="customer" class="form-label">Customer</label>
+              <select class="form-select form-control mb-1" id="customer"
+                onchange="createOrderApi.customerSetter(this)">
+                <option selected>-Select</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Product Selection -->
+          <div class="row align-items-end mb-4 g-2">
+            <div class="col-md-5">
+              <label for="product" class="form-label">Product</label>
+              <select class="form-select form-control" id="product" onchange="createOrderApi.productSetter(this)">
+                <option selected>-Select</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="quantity" class="form-label">Quantity</label>
+              <input type="number" min="1" class="form-control" id="quantity" value="1" />
+            </div>
+            <div class="col-md-3">
+              <label for="basePrice" class="form-label">Base Price</label>
+              <select name="base_price" id="base_price" onchange="createOrderApi.basePriceSetter(this)"
+                class="form-control" required>
+                <option value="">Select</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <div class="gap-2" style="margin-top: 26px;">
+                <button onclick="createOrderApi.addProduct()" class="beautibutton mb-15">
+                  <span class="glyphicon glyphicon-plus"></span> Add Product
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Panel -->
+          <div class="card mt-4 mb-2">
+            <div class="card-header">
+              Product Details
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle text-center mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Product</th>
+                      <th>Qty</th>
+                      <th>Price</th>
+                      <th>Tax%</th>
+                      <th>Total</th>
+                      <th>Time & Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="order_grid"></tbody>
+                </table>
+              </div>
+              <div class="col-lg-12">
+                <button type="button" class="savebutton" onclick="createOrderApi.saveOrder()">
+                  Save Order
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- <div class="loader-over-lay" id="loader">
+      <div style="top: 50%; position: relative; text-align: center">
+        <h3 id="loader_msg">Please wait</h3>
+      </div>
+    </div>
+    <div class="loader-over-lay loading" id="loadMasterDom">
+      <div style="top: 50%; position: relative; text-align: center">
+        <button type="button" onclick="createOrderApi.loadMasterForCreateNewOrder()">
+          Load Master
+        </button>
+      </div>
+    </div> -->
+    <script src="js/createOrderApi.js"></script>
+    <script>
+      $(document).ready(function () {
+        createOrderApi.loadMasterForCreateNewOrder();
+      });
+    </script>
+  </body>
+
+</html>
