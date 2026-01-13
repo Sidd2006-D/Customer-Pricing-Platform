@@ -20,3 +20,4 @@ With a robust Python backend (leveraging SQLAlchemy for relational data models) 
 - Web-based frontend for intuitive user interaction
 
 Ideal for organizations that require flexibility in pricing, centralized order tracking, and an all-in-one solution for managing customers, products, and pricing.
+Thanks
